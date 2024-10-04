@@ -6,28 +6,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const mysql = require('mysql');
 
 // Fichier de configuration des paramètres
 const config = require('./config.json');
 
-// Paramètres de la base de données
-const connection = mysql.createConnection({
-    host: config.database.host,
-    user: config.database.user,
-    password: config.database.password,
-    database: config.database.name
-});
-
-// Connection à la BDD
-connection.connect((err) => {
-    if (err) {
-        console.error('Erreur de connexion à la base de données :', err);
-        throw err;
-    }
-    console.log('Connecté à la base de données MySQL');
-});
-
+const connection = require('./db')
 // App principale
 const app = express();
 
