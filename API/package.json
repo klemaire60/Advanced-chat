@@ -90,7 +90,6 @@
     "minizlib": "^2.1.2",
     "mkdirp": "^1.0.4",
     "ms": "^2.0.0",
-    "mysql": "^2.18.1",
     "negotiator": "^0.6.3",
     "node-addon-api": "^5.1.0",
     "node-fetch": "^2.7.0",
@@ -140,7 +139,12 @@
     "yallist": "^4.0.0"
   },
   "devDependencies": {
-    "@types/cookie-parser": "^1.4.7"
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/mysql": "^2.15.26",
+    "mysql": "^2.18.1"
   },
   "scripts": {
     "test": "node server.js",

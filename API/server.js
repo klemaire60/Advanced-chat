@@ -63,7 +63,7 @@ app.post('/register', (req, res) => {
     }
 
     if(containsInvalidChars(username)) {
-        errorMessage += "Le nom d'utilisateurs contient des caractères interdits. "
+        errorMessage += "Le nom d'utilisateur contient des caractères interdits. "
     }
 
     if(containsInvalidChars(password)) {
@@ -118,6 +118,62 @@ app.post('/register', (req, res) => {
                     return res.status(200).json({ message: "Compte créé avec succès" });
                 })
             })
+        })
+    })
+})
+
+app.post('/login', (req, res) => {
+    const {mail, password} = req.body;
+
+    let errorMessage ='';
+    
+    // Vérification de chaque champs
+    if(containsInvalidChars(mail)) {
+        errorMessage += "Le mail contient des caractères interdits. "
+    }
+
+    if(containsInvalidChars(password)) {
+        errorMessage += "Le mot de passe contient des caractères interdits."
+    }
+
+    // Si un des champs contient un caractères interdits alors on renvoie la requête
+    if(errorMessage !== "") {
+        return res.status(401).json({ message : errorMessage });
+    }
+
+    const sqlVerif = 'SELECT password FROM user WHERE mail = ?'
+
+    connection.query(sqlVerif, [mail], (err, result) => {
+        if(err) {
+            console.error('Erreur lors de la requete sqlVerif de la connexion\nErreur :\n',err);
+            return res.status(500).json({ message : "Erreur lors de la connexion" });
+        }
+
+        if(result.lenght === 0) {
+            return res.status(401).json({ message : "Mail inconnu" });
+        }
+
+        const isPasswordValid = bcrypt.compareSync(password, result[0].password);
+
+        if(!isPasswordValid) {
+            return res.status(401).json({ message : "Mot de passe invalide" })    
+        }
+        
+        const sqlToken = 'UPDATE user SET token = ? WHERE mail = ?'
+        let token = jwt.sign({ mail }, config.jwtKey);
+
+        connection.query(sqlToken, [token, mail], (err) => {
+            if(err) {
+                console.error('Erreur lors de la reqête sqlToken\nErreur:\n',err);
+                return res.status(500).json({ message : "Erreur lors de la connexion" });
+            }
+
+            res.cookie('userToken', token, {
+                httpOnly: true,
+                secure: false,
+                maxAge: 43200000
+            });
+            return res.status(200).json({ message : "Connexion réussie" })
         })
     })
 })
