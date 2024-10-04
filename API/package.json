@@ -122,8 +122,8 @@
     "signal-exit": "^3.0.7",
     "sqlstring": "^2.3.1",
     "statuses": "^2.0.1",
-    "string-width": "^4.2.3",
     "string_decoder": "^1.1.1",
+    "string-width": "^4.2.3",
     "strip-ansi": "^6.0.1",
     "tar": "^6.2.1",
     "toidentifier": "^1.0.1",
@@ -139,7 +139,9 @@
     "wrappy": "^1.0.2",
     "yallist": "^4.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.7"
+  },
   "scripts": {
     "test": "node server.js",
     "start": "node server.js"
